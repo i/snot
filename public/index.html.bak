@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <title></title>
+  <head>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  </head>
+  <body>
+
+  <div href="#" class="button" id="right" >RIGHT</a>
+  <div href="#" class="button" id="left" >LEFT</a>
+  <div href="#" class="button" id="up" >UP</a>
+  <div href="#" class="button" id="down" >DOWN</a>
+  <div href="#" class="button" id="c" >B</a>
+  <div href="#" class="button" id="d" >A</a>
+  <div href="#" class="button" id="s" >X</a>
+  <div href="#" class="button" id="x" >Y</a>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      console.log('ok');
+      var ws = new WebSocket('ws://192.168.0.15:3000/ws');
+      ws.onmessage = function onmessage(e) {
+        console.log(e.data);
+      };
+
+      $('.button').disableSelection();
+
+      $('.button').on('vmousedown', function(e) { 
+          console.log('pushing:', e.target.id);
+          ws.send(e.target.id + '.down');
+      })
+
+      $('.button').on('vmouseup', function(e) { 
+          console.log('releasing:', e.target.id);
+          ws.send(e.target.id + '.up');
+      })
+
+      ws.onopen = function onopen() {
+        window.setInterval(function() {
+          window.navigator.geolocation.getCurrentPosition(function onLocation(loc) {
+            ws.send('hello');
+          });
+        }, 1000);
+      };
+
+    });
+
+    $.fn.extend({
+        disableSelection: function() {
+	    console.log('disabling')
+            this.each(function() {
+                this.onselectstart = function() {
+                    return false;
+                };
+                this.unselectable = "on";
+                $(this).css('-moz-user-select', 'none');
+                $(this).css('-webkit-user-select', 'none');
+            });
+            return this;
+        }
+    });
+
+  </script>
+  </body>
+</html>
+
+

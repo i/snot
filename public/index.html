@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <title></title>
+  <head>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://rawgit.com/davidjbradshaw/imagemap-resizer/master/js/imageMapResizer.min.js"></script>
+    <script type="text/javascript"></script>
+  </head>
+  <body>
+
+<!--
+  <div href="#" class="button" id="right" >RIGHT</a>
+  <div href="#" class="button" id="left" >LEFT</a>
+  <div href="#" class="button" id="up" >UP</a>
+  <div href="#" class="button" id="down" >DOWN</a>
+  <div href="#" class="button" id="c" >B</a>
+  <div href="#" class="button" id="d" >A</a>
+  <div href="#" class="button" id="s" >X</a>
+  <div href="#" class="button" id="x" >Y</a>
+-->
+
+<div>
+	<map name="button-map" id="button-map">
+	    <area class="button" id="s" alt="Y" title="Y" coords="903,356,58" shape="circle">
+	    <area class="button" id="x" alt="X" title="X" coords="1023,261,59" shape="circle">
+	    <area class="button" id="c" alt="B" title="B" coords="1022,447,59" shape="circle">
+	    <area class="button" id="d" alt="A" title="A" coords="1143,352,59" shape="circle">
+	    <area class="button" id="up" alt="Up" title="Up" coords="345,231,245,315" shape="rect">
+	    <area class="button" id="right" alt="Right" title="Right" coords="322,313,418,392" shape="rect">
+	    <area class="button" id="down" alt="Down" title="Down" coords="253,394,341,473" shape="rect">
+	    <area class="button" id="left" alt="Left" title="Left" coords="178,313,259,396" shape="rect">
+	    <area class="button" id="tab" alt="Select" title="Select" coords="472,409,573,328,613,375,510,458" shape="poly">
+	    <area class="button" id="return" alt="Start" title="Start" coords="601,415,716,328,757,375,645,465" shape="poly">
+	    <area class="button" id="f" alt="R" title="R" coords="870,34,1085,30,1188,96,1151,137,1053,112,868,107" shape="poly">
+	    <area class="button" id="a" alt="L" title="L" coords="152,77,268,36,455,36,467,103,268,114,170,150" shape="poly">
+	</map>
+	<img src="http://i.imgur.com/fxHaY7x.jpg" usemap="#button-map" ismap="ismap" width="100%" border="0"> 
+</div>
+
+
+<style type="text/css">
+img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    max-width: 100%;
+    max-height: 100%;
+}
+html {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+</style>
+
+
+  <script type="text/javascript">
+
+ function hideAddressBar() {
+   if(!window.location.hash) {
+     if(document.height < window.outerHeight)
+       document.body.style.height = (window.outerHeight + 50) + 'px';
+     setTimeout( function(){ 
+         window.scrollTo(0, 1); 
+         document.body.style.height = 'auto'; 
+       }, 50 );
+   }
+ }
+    $(document).ready(function() {
+      hideAddressBar()
+      $('map').imageMapResize();
+      console.log('ok');
+      var ws = new WebSocket('ws://192.168.0.15:3000/ws');
+      ws.onmessage = function onmessage(e) {
+        console.log(e.data);
+      };
+
+      $('.button').disableSelection();
+
+      $('.button').on('vmousedown', function(e) { 
+          console.log('pushing:', e.target.id);
+          ws.send(e.target.id + '.down');
+      })
+
+      $('.button').on('vmouseup', function(e) { 
+          console.log('releasing:', e.target.id);
+          ws.send(e.target.id + '.up');
+      })
+
+      ws.onopen = function onopen() {
+	ws.send('hello');
+      };
+
+    });
+
+    $.fn.extend({
+        disableSelection: function() {
+	    console.log('disabling')
+            this.each(function() {
+                this.onselectstart = function() {
+                    return false;
+                };
+                this.unselectable = "on";
+                $(this).css('-moz-user-select', 'none');
+                $(this).css('-webkit-user-select', 'none');
+            });
+            return this;
+        }
+    });
+
+  </script>
+  </body>
+</html>
+
+
