@@ -116,9 +116,10 @@ func main() {
 			fmt.Println(string(msg))
 		}
 	}))
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./public/index.html")
-	})
+	//http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	//http.ServeFile(w, r, "./public/index.html")
+	//})
+	http.Handle("/", http.FileServer(http.Dir("public")))
 
 	go http.ListenAndServe(":3000", nil)
 
