@@ -12,12 +12,11 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-
 func main() {
 	readDevice, err := os.Open("/dev/input/event0")
- 	f, err := os.OpenFile("/dev/input/event0", os.O_APPEND|os.O_WRONLY, os.ModeCharDevice|os.ModeAppend)
+	f, err := os.OpenFile("/dev/input/event0", os.O_APPEND|os.O_WRONLY, os.ModeCharDevice|os.ModeAppend)
 	if err != nil {
-		log.Fatalf("Error opening path: %v", err)
+		//		log.Fatalf("Error opening path: %v", err)
 	}
 	fmt.Println("OK")
 	fmt.Println(f)
@@ -25,32 +24,32 @@ func main() {
 	//mappings := make(map[string]map[string][]byte)
 	var mappings map[string]map[string][]byte
 	/*
-	for _, letter := range characters {
-		for i:=0; i < 2; i++ {
-			buf := make([]byte, 128)
-			fmt.Printf("type character %q\n", letter)
-			n, err := readDevice.Read(buf)
-			if err != nil {
-				log.Fatalf("error reading: %v", err)
+		for _, letter := range characters {
+			for i:=0; i < 2; i++ {
+				buf := make([]byte, 128)
+				fmt.Printf("type character %q\n", letter)
+				n, err := readDevice.Read(buf)
+				if err != nil {
+					log.Fatalf("error reading: %v", err)
+				}
+				fmt.Printf("read %d bytes\n", n)
+				mappings[strings.ToUpper(letter)] = append(mappings[strings.ToUpper(letter)],buf[:n])
 			}
-			fmt.Printf("read %d bytes\n", n)
-			mappings[strings.ToUpper(letter)] = append(mappings[strings.ToUpper(letter)],buf[:n])
 		}
-	}
 
-	jsn, err := json.Marshal(mappings)
-	if err != nil {
-		log.Fatalf("error writing mappings: %v", err)
-	}
-	fmt.Println(string(jsn))
+		jsn, err := json.Marshal(mappings)
+		if err != nil {
+			log.Fatalf("error writing mappings: %v", err)
+		}
+		fmt.Println(string(jsn))
 
-	mapFile, err := os.Create("./mappings_v2.json")
-	if err != nil {
-		log.Fatalf("error creating mapping file: %v", err)
-	}
-	mapFile.Write(jsn)
-	mapFile.Close()
-	os.Exit(0)
+		mapFile, err := os.Create("./mappings_v2.json")
+		if err != nil {
+			log.Fatalf("error creating mapping file: %v", err)
+		}
+		mapFile.Write(jsn)
+		mapFile.Close()
+		os.Exit(0)
 	*/
 
 	mapFile, err := os.Open("./mappings_v2.json")
@@ -130,25 +129,23 @@ func main() {
 			log.Fatalf("error reading stdin: %v", err)
 		}
 		charDown(strings.ToUpper(strings.TrimSpace(string(input[:n]))))
-		time.Sleep(time.Millisecond*20)
+		time.Sleep(time.Millisecond * 20)
 		charUp(strings.ToUpper(strings.TrimSpace(string(input[:n]))))
 	}
 }
-
 
 // if _, err := f.Write(buf[:n]); err != nil {
 // 	fmt.Printf("Couldn't write to file: %v", err.Error())
 // }
 
 var characters = []string{
-// 	"A", "B", "C", "D", "E", "F", "G", "H", 
-// 	"I", "J", "K", "L", "M", "N", "O", "P",
-// 	"Q", "R", "S", "T", "U", "V", "W", "X", 
-//	"Y", "Z", "LEFT", "RIGHT", "ESC",
+	// 	"A", "B", "C", "D", "E", "F", "G", "H",
+	// 	"I", "J", "K", "L", "M", "N", "O", "P",
+	// 	"Q", "R", "S", "T", "U", "V", "W", "X",
+	//	"Y", "Z", "LEFT", "RIGHT", "ESC",
 	// "UP", "DOWN",
-	 "C",
+	"C",
 }
-
 
 // for each character
 //   prompt user for input

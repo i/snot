@@ -36,10 +36,10 @@
 	    <area class="button" id="f" alt="R" title="R" coords="870,34,1085,30,1188,96,1151,137,1053,112,868,107" shape="poly">
 	    <area class="button" id="a" alt="L" title="L" coords="152,77,268,36,455,36,467,103,268,114,170,150" shape="poly">
 	</map>
-	<img src="http://i.imgur.com/fxHaY7x.jpg" usemap="#button-map" ismap="ismap" width="100%" border="0"> 
+	<img src="http://i.imgur.com/fxHaY7x.jpg" usemap="#button-map" ismap="ismap" width="100%" border="0">
 </div>
 
-
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <style type="text/css">
 img {
     position: absolute;
@@ -62,9 +62,9 @@ html {
    if(!window.location.hash) {
      if(document.height < window.outerHeight)
        document.body.style.height = (window.outerHeight + 50) + 'px';
-     setTimeout( function(){ 
-         window.scrollTo(0, 1); 
-         document.body.style.height = 'auto'; 
+     setTimeout( function(){
+         window.scrollTo(0, 1);
+         document.body.style.height = 'auto';
        }, 50 );
    }
  }
@@ -79,12 +79,12 @@ html {
 
       $('.button').disableSelection();
 
-      $('.button').on('vmousedown', function(e) { 
+      $('.button').on('vmousedown', function(e) {
           console.log('pushing:', e.target.id);
           ws.send(e.target.id + '.down');
       })
 
-      $('.button').on('vmouseup', function(e) { 
+      $('.button').on('vmouseup', function(e) {
           console.log('releasing:', e.target.id);
           ws.send(e.target.id + '.up');
       })
